@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossy road</title>
+    <style>
+        canvas{
+            background-color: white;
+        }
+        body{
+            background-color:gray;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <canvas id="myCanvas" width="1200" height="1150" style="border:2px solid #000000;"></canvas>
+    </center>
+    <script>
+        var canvas = document.getElementById('myCanvas'); 
+        var ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "rgb(255,105,97)";
+        ctx.fillRect(0, 0, 200, 1150);
+
+        ctx.fillStyle = "rgb(255,105,97)";
+        ctx.fillRect(canvas.width-200, 0, 200, 1150);
+
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "black"; 
+        ctx.fillText("Tiempo" , 10, 40)
+        //Poner que funcione el tiempo
+        ctx.fillText("00:00" , 10, 80)
+        ctx.fillText("Nivel" , 10, 150)
+        //Poner que funcione el contador de nivel
+        ctx.fillText("0" , 80, 150)
+
+
+    </script>
+    
+</body>
+</html>
