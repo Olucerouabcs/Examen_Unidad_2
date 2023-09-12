@@ -23,14 +23,22 @@
 
         var mainX=0, mainY=0, vida=0;
         var pause=false;
-        var dir, paso=50;
+        var dir, paso=30;
+        console.log(canvas.width);
+
+        //img.src = 'entrega-de-comida.png';
+        //ctx.drawImage(img2, x2, y2, 100, 100); 
+
+        var enBalsa = false;
+        
+        var si =true;
 
         function tablero(){
             ctx.fillStyle = "rgb(255,105,97)";
-            ctx.fillRect(0, 0, 100, 900);
+            ctx.fillRect(0, 0, 85, 900);
 
             ctx.fillStyle = "rgb(255,105,97)";
-            ctx.fillRect(canvas.width-100, 0, 100, 900);
+            ctx.fillRect(canvas.width-85, 0, 85, 900);
 
             ctx.font = "20px Arial";
             ctx.fillStyle = "black"; 
@@ -55,24 +63,42 @@
             if (!pause) { 
                 dir = 1;
                 moveObjetos(0,paso);
+                console.log("Arriba");
             }
             break;
         case 83:
             if (!pause) { 
                 dir = 2;
-                moveObjetos(0,-paso);
+                if(cesped.y<450){
+                    moveObjetos(0,0);
+                }else{
+                    moveObjetos(0,-paso);
+                    console.log("Abajo");
+                }
+
             }
             break;
         case 68:
             if (!pause) { 
                 dir = 3;
-                movePlayer(paso,0);
+                if(jugador.x>550){
+                    movePlayer(0,0);    
+                }else{
+                    movePlayer(paso,0);
+                }
+
             }
             break;
         case 65:
             if (!pause) { 
                 dir = 4;
-                movePlayer(-paso,0);
+                if(jugador.x<90){
+                    movePlayer(0,0);    
+                }else{
+                    movePlayer(-paso,0);
+                }
+                console.log("x: "+jugador.x );
+                console.log("izquierda");
             }
             break;
         case 32:
@@ -81,15 +107,34 @@
         }
 
         });
+
+
+
         function repaint() {
             if(!pause){
                 ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, 700, 900);
 
-                tablero()
+               if(coche.x==630 ){//|| si ==false
+                coche.x =10;
+                  //si=false;
+                  console.log(si);
+               }
+               if(coche2.x==10 ){//|| si ==false
+                coche2.x =630;
+                  //si=false;
+                  console.log(si);
+               }
+               //if(coche.x==85||si==true){
+                coche2.x -=1;
+                coche.x +=1; 
+               // si=true;
+               // console.log(si);
+               //}
 
                repintarObjetos();
                jugador.dibujar();
+               tablero()
                
             }else{
                 ctx.fillStyle = "rgba(154,160,154,0.020)";
@@ -162,9 +207,9 @@
 
         class Rio{
             constructor(dy) {
-                this.x = 100; // Coordenada X inicial
+                this.x = 85; // Coordenada X inicial
                 this.y = dy; // Coordenada Y inicial
-                this.width = 500; // Ancho del cuadro
+                this.width = 530; // Ancho del cuadro
                 this.height = 300; // Alto del cuadro
             }
 
@@ -180,16 +225,16 @@
         const rio1 = new Rio(200);
         const rio2 = new Rio(-500);
 
-        // Dibujar el jugador en el lienzo
+        // Dibujar el Rio en el lienzo
         rio1.dibujar();
         rio2.dibujar();
 
         class Carretera{
-            constructor() {
-                this.x = 300; // Coordenada X inicial
-                this.y = 300; // Coordenada Y inicial
-                this.width = 100; // Ancho del cuadro
-                this.height = 50; // Alto del cuadro
+            constructor(dy) {
+                this.x = 85; // Coordenada X inicial
+                this.y = dy; // Coordenada Y inicial
+                this.width = 530; // Ancho del cuadro
+                this.height = 300; // Alto del cuadro
             }
 
             dibujar() {
@@ -200,18 +245,20 @@
 
         }
 
-        // Crear una instancia de Jugador
-        const carretera = new Carretera();
+        // Crear una instancia de cesped
+        const carretera = new Carretera(200);
+        const carretera2 = new Carretera(-300);
+        const carretera3 = new Carretera(-700);
 
-        // Dibujar el jugador en el lienzo
-        carretera.dibujar();
+        // Dibujar el carretera en el lienzo
+        //carretera.dibujar();
 
         class Cesped{
-            constructor() {
-                this.x = 400; // Coordenada X inicial
-                this.y = 400; // Coordenada Y inicial
-                this.width = 100; // Ancho del cuadro
-                this.height = 50; // Alto del cuadro
+            constructor(dy) {
+                this.x = 85; // Coordenada X inicial
+                this.y = dy; // Coordenada Y inicial
+                this.width = 530; // Ancho del cuadro
+                this.height = 500; // Alto del cuadro
             }
 
             dibujar() {
@@ -222,41 +269,78 @@
 
         }
 
-        // Crear una instancia de Jugador
-        const cesped = new Cesped();
+        // Crear una instancia de cesped
+        const cesped = new Cesped(400);
+        const cesped2 = new Cesped(0);
+        const cesped3 = new Cesped(-600);
 
-        // Dibujar el jugador en el lienzo
+        // Dibujar el cesped en el lienzo
         cesped.dibujar();
+        
+        class Coche{
+            constructor(dy,dx) {
+                this.x = dx; // Coordenada X inicial
+                this.y = dy; // Coordenada Y inicial
+                this.width = 100; // Ancho del cuadro
+                this.height = 70; // Alto del cuadro
+            }
+
+            dibujar() {
+                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
+                ctx.fillStyle = 'yellow'; // Color del cuadro (en este caso, azul)
+                ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
+            }
+
+        }
+
+        const coche = new Coche(400,100);
+        const coche2 = new Coche(230,630);
+
+        coche.dibujar();
 
         function repintarObjetos(){
-            rio1.dibujar();
-            rio2.dibujar();
+            //rio1.dibujar();
+            //rio2.dibujar();
             cesped.dibujar();
+            cesped2.dibujar();
+            cesped3.dibujar();
             carretera.dibujar(); 
+            carretera2.dibujar(); 
+            carretera3.dibujar(); 
+            coche.dibujar();
+            coche2.dibujar();
         }
 
 
         function movePlayer(dx, dy) {
-         // Mueve al jugador en la dirección especificada (dx, dy)
-         jugador.x += dx;
-         jugador.y += dy;
-         repaint();
+            if (!pause) {
+                if (enBalsa) {
+                    jugador.x += 1; // Mover al jugador horizontalmente con la balsa
+                } else {
+                    jugador.x += dx;
+                    jugador.y += dy;
+                }
+                repaint();
+            }
         }
 
         function moveObjetos(dx, dy) {
          // Mueve al jugador en la dirección especificada (dx, dy)
-         cesped.x += dx;
          cesped.y += dy;
+         cesped2.y += dy;
+         cesped3.y += dy;
 
-         rio1.x += dx;
          rio1.y += dy;
 
-         
-         rio2.x += dx;
          rio2.y += dy;
 
-         carretera.x += dx;
          carretera.y += dy;
+         carretera2.y+= dy;
+         carretera3.y+= dy;
+
+         coche.y += dy;
+         coche2.y += dy;
+         
          repaint();
         }
 
