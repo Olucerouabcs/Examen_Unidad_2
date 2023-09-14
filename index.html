@@ -25,14 +25,19 @@
         var pause=false;
         var dir, paso=30;
         console.log(canvas.width);
+        let imgPlayer = new Image();
         let img = new Image();
         let img2 = new Image();
         let img3 = new Image();
         let img4 = new Image();
+        let audio = new Audio();
+        audio.src = 'Captain_Scurvy.mp3';
+        audio.play();
         img.src = 'cesped.png';
         img2.src = 'carreteraH.png';
-        img3.src = 'carroRojo.png';
+        img3.src = 'carroRojo-2.png';
         img4.src = 'carroVerde.png';
+        imgPlayer.src = 'Player.png';
         //ctx.drawImage(img2, x2, y2, 100, 100); 
 
         var enBalsa = false;
@@ -202,14 +207,15 @@
             constructor() {
                 this.x = (canvas.width/2)-25; // Coordenada X inicial
                 this.y = 600; // Coordenada Y inicial
-                this.width = 50; // Ancho del cuadro
-                this.height = 50; // Alto del cuadro
+                this.width = 70; // Ancho del cuadro
+                this.height = 70; // Alto del cuadro
             }
 
             dibujar() {
                 //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                ctx.fillStyle = 'black'; // Color del cuadro (en este caso, azul)
-                ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
+                //ctx.fillStyle = 'black'; // Color del cuadro (en este caso, azul)
+                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
+                ctx.drawImage(imgPlayer,this.x, this.y, this.width, this.height);
             }
         }
 
@@ -298,8 +304,8 @@
             constructor(dy,dx,img) {
                 this.x = dx; // Coordenada X inicial
                 this.y = dy; // Coordenada Y inicial
-                this.width = 150; // Ancho del cuadro
-                this.height = 120; // Alto del cuadro
+                this.width = 120; // Ancho del cuadro
+                this.height = 85; // Alto del cuadro
                 this.img = img;
             }
 
