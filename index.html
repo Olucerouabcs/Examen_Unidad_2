@@ -17,6 +17,7 @@
     <center>
         <canvas id="myCanvas" width="700" height="750" style="border:2px solid #000000;"></canvas>
     </center>
+    <span id="cronometro">00:00</span>
     <script>
         var canvas = document.getElementById('myCanvas'); 
         var ctx = canvas.getContext("2d");
@@ -24,6 +25,12 @@
         var mainX=0, mainY=0, vida=0;
         var pause=false;
         var dir, paso=30;
+        var invulnerable = false;
+        var invulnerabilityDuration = 2000; // 2 segundos en milisegundos
+        var lastCollisionTime = 0;
+        var gameOverScreen = false;
+        var minutos = 0;
+        var segundos = 0;
         console.log(canvas.width);
         let imgPlayer = new Image();
         let img = new Image();
@@ -31,13 +38,30 @@
         let img3 = new Image();
         let img4 = new Image();
         let audio = new Audio();
-        audio.src = 'Captain_Scurvy.mp3';
-        audio.play();
+        let audio2 = new Audio();
+        let audio3 = new Audio();
+        let audio4 = new Audio();
+        let audio5 = new Audio();
+        let audio6 = new Audio();
+        audio.src = 'Blippy_Trance.mp3';
+        audio.loop = true
+        audio.volume = 0.4;
+        audio2.src = 'gallina.mp3';
+        audio3.src = 'choque.mp3';
+        audio4.src = 'street-traffic-2.mp3';
+        audio4.loop = true
+        audio4.volume = 0.4;
+        audio5.src = 'Evening.mp3';
+        audio5.loop = true
+        audio6.src = 'paso.mp3';
+        audio6.volume = 1;
+        //audio.play();
         img.src = 'cesped.png';
         img2.src = 'carreteraH.png';
         img3.src = 'carroRojo-2.png';
         img4.src = 'carroVerde.png';
         imgPlayer.src = 'Player.png';
+        var vida = 3;
         //ctx.drawImage(img2, x2, y2, 100, 100); 
 
         var enBalsa = false;
@@ -45,7 +69,9 @@
         var si =true;
 
         function tablero(){
-            ctx.fillStyle = "rgb(255,105,97)";
+            audio.play();
+            audio4.play();
+            ctx.fillStyle = "cyan";
             ctx.fillRect(0, 0, 85, canvas.height);
 
             ctx.fillStyle = "rgb(255,105,97)";
@@ -55,20 +81,22 @@
             ctx.fillStyle = "black"; 
             ctx.fillText("Tiempo" , 10, 40)
             //Poner que funcione el tiempo
-            ctx.fillText("00:00" , 10, 70)
+            ctx.fillText(getTiempoFormateado(), 10, 70); // Llama a una función para obtener el tiempo formateado
             ctx.fillText("Nivel" , 10, 130)
             //Poner que funcione el contador de nivel
             ctx.fillText("0" , 60, 130)
         
             //Contador de vidas
             ctx.fillText("Vidas" , 10, 210)
-            ctx.fillText("0" , 70, 210)
+            ctx.fillText(vida , 70, 210)
         }
 
         tablero();
 
         document.addEventListener("keydown", (e) => {
             console.log(e);
+            audio6.play();
+            
             switch (e.keyCode) {
         case 87:
             if (!pause) { 
@@ -153,7 +181,16 @@
                //}
 
                repintarObjetos();
-               jugador.dibujar();
+               
+                if (invulnerable) {
+                    // Cambia el estado de visibilidad del jugador cada 200 ms para el efecto de parpadeo.
+                    if (Date.now() - lastCollisionTime > 100) {
+                        jugador.dibujar();
+                    }
+                    
+                } else {
+                    jugador.dibujar();
+                }
                tablero()
                
             }else{
@@ -169,6 +206,7 @@
         function update() {
             if(pause==false){
                 console.log("dir " + dir);
+                checkCollisions();
 
                 switch (dir) {
                     case 1:
@@ -187,7 +225,12 @@
                         break;
                 }
             }
-            repaint();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (gameOverScreen) {
+                displayGameOverScreen();
+            } else {
+                repaint();
+            }
             window.requestAnimationFrame(update);
         }
 
@@ -205,7 +248,7 @@
 
         class Jugador {
             constructor() {
-                this.x = (canvas.width/2)-25; // Coordenada X inicial
+                this.x = (canvas.width/2)-35; // Coordenada X inicial
                 this.y = 600; // Coordenada Y inicial
                 this.width = 70; // Ancho del cuadro
                 this.height = 70; // Alto del cuadro
@@ -223,7 +266,7 @@
         const jugador = new Jugador();
 
         // Dibujar el jugador en el lienzo
-        jugador.dibujar();
+        //jugador.dibujar();
 
         class Rio{
             constructor(dy) {
@@ -399,6 +442,105 @@
          
          repaint();
         }
+        function checkCollisions() {
+            if (!invulnerable) {
+                for (var i = 0; i < coches.length; i++) {
+                    var coche = coches[i];
+                    if (
+                        jugador.x < coche.x + coche.width &&
+                        jugador.x + jugador.width > coche.x &&
+                        jugador.y < coche.y + coche.height &&
+                        jugador.y + jugador.height > coche.y
+                    ) {
+                        // Colisión detectada mientras no esté invulnerable
+                        handleCollision();
+                    }
+                }
+            }
+        }
+
+        function handleCollision() {
+            if (!invulnerable) {
+                vida--; // Reducir la cantidad de vidas
+                invulnerable = true; // El jugador ahora es invulnerable
+                lastCollisionTime = Date.now(); // Registra el tiempo de la última colisión
+
+                // Reubicar al jugador en una posición segura después de la colisión.
+                jugador.x = (canvas.width / 2) - 25;
+                jugador.y = 600;
+                audio2.play();
+                audio3.play();
+                if (vida <= 0) {
+                    pause = true;
+                    gameOverScreen = true; // Establece el estado de "Game Over" cuando se agoten las vidas
+                }
+
+                // Inicia un temporizador para volver al jugador vulnerable después de 2 segundos.
+                setTimeout(() => {
+                    invulnerable = false;
+                }, invulnerabilityDuration);
+            }
+        }
+        function displayGameOverScreen() {
+            audio.pause();
+            audio5.play();
+            ctx.fillStyle = "rgba(0, 0, 0, 0.7)"; // Fondo oscuro
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = "40px Arial";
+            ctx.fillStyle = "white";
+            ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2 - 40);
+
+            // Dibuja el botón de "Volver a Empezar"
+            ctx.fillStyle = "red";
+            ctx.fillRect(canvas.width / 2 - 160, canvas.height / 2 + 20, 320, 40);
+            ctx.fillStyle = "white";
+            ctx.fillText("Volver a Empezar", canvas.width / 2 - 160, canvas.height / 2 + 50);
+
+            // Agrega un detector de clic para el botón de "Volver a Empezar"
+            canvas.addEventListener("click", restartGame);
+        }
+
+        function restartGame(event) {
+            // Verifica si se hizo clic en el botón de "Volver a Empezar"
+            var rect = canvas.getBoundingClientRect();
+            var mouseX = event.clientX - rect.left;
+            var mouseY = event.clientY - rect.top;
+
+            if (
+                mouseX > canvas.width / 2 - 80 &&
+                mouseX < canvas.width / 2 + 80 &&
+                mouseY > canvas.height / 2 + 20 &&
+                mouseY < canvas.height / 2 + 60
+            ) {
+                // Reinicia el juego
+                gameOverScreen = false;
+                vida = 3; // Restablece las vidas u otros valores del juego según sea necesario.
+                pause=false;
+                location.reload();
+                // Otras reinicializaciones del juego...
+
+                // Elimina el detector de clic para evitar múltiples clics accidentales
+                canvas.removeEventListener("click", restartGame);
+            }
+        }
+        function getTiempoFormateado() {
+    var minutosStr = minutos < 10 ? "0" + minutos : minutos.toString();
+    var segundosStr = segundos < 10 ? "0" + segundos : segundos.toString();
+    return minutosStr + ":" + segundosStr;
+}
+
+// Actualiza el cronómetro cada segundo
+setInterval(function () {
+    segundos++;
+    if (segundos === 60) {
+        minutos++;
+        segundos = 0;
+    }
+    repaint(); // Vuelve a dibujar para mostrar el tiempo actualizado
+}, 1000);
+
+
 
     </script>
     
