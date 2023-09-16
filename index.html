@@ -22,7 +22,7 @@
         var canvas = document.getElementById('myCanvas'); 
         var ctx = canvas.getContext("2d");
 
-        var mainX=0, mainY=0, vida=6;
+        var mainX=0, mainY=0, vida=10;
         var pause=false;
         var dir, paso=30,trayecto=50, cantidadDe=8;
         var invulnerable = false;
@@ -33,6 +33,7 @@
         var segundos = 0;
         var nivel=1;
         console.log(canvas.width);
+        let vidasEnemigo = 1;
         let imgPlayer = new Image();
         let img = new Image();
         let img2 = new Image();
@@ -43,12 +44,15 @@
         let img7 = new Image();
         let img8 = new Image();
         let img9 = new Image();
+        let img10 = new Image();
         let audio = new Audio();
         let audio2 = new Audio();
         let audio3 = new Audio();
         let audio4 = new Audio();
         let audio5 = new Audio();
         let audio6 = new Audio();
+        let audio7 = new Audio();
+        let audio8 = new Audio();
         audio.src = 'Blippy_Trance.mp3';
         audio.loop = true
         audio.volume = 0.4;
@@ -61,6 +65,8 @@
         audio5.loop = true
         audio6.src = 'paso.mp3';
         audio6.volume = 1;
+        audio7.src = 'cuchillaso.mp3';
+        audio8.src = 'boton.mp3';
         //audio.play();
         img.src = 'cesped.png';
         img2.src = 'carreteraH.png';
@@ -71,6 +77,7 @@
         img7.src = 'fondo.jpg';
         img8.src = 'jefe.png'
         img9.src = 'cuchillo.png';
+        img10.src = 'huevo.png';
         imgPlayer.src = 'Player.png';
         //ctx.drawImage(img2, x2, y2, 100, 100); 
 
@@ -99,7 +106,7 @@
         
             //Contador de vidas
             ctx.fillText("Vidas" , 10, 210);
-            ctx.fillText(vida , 70, 210);
+            ctx.fillText(vida , 10, 240);
         }
 
         tablero();
@@ -173,14 +180,18 @@
                 //ctx.fillStyle = "white";
                 //ctx.fillRect(0, 0, 700, 900);
 
-               if(coches[0].x==630  || coches[2].x==630){//|| si ==false
+               if(coches[0].x==630){//|| si ==false
                 coches[0].x =10;
-                coches[2].x =10;
                   //si=false;
                   console.log(si);
                }
                if(coches[1].x==10 ){//|| si ==false
                 coches[1].x =630;
+                  //si=false;
+                  console.log(si);
+               }
+               if(coches[2].x==630){//|| si ==false
+                coches[2].x =10;
                   //si=false;
                   console.log(si);
                }
@@ -239,21 +250,33 @@
                   //si=false;
                   console.log(si);
                }
+               if(coches[14].x==630){//|| si ==false
+                coches[14].x =10;
+                  //si=false;
+                  console.log(si);
+               }
+               if(coches[15].x==10 ){//|| si ==false
+                coches[15].x =630;
+                  //si=false;
+                  console.log(si);
+               }
                //if(coche.x==85||si==true){
                 coches[0].x +=1; 
                 coches[1].x -=1;
-                coches[2].x +=1;
-                coches[3].x -=1;
+                coches[2].x +=2;
+                coches[3].x -=2;
                 coches[4].x +=1;
                 coches[5].x -=1;
-                coches[6].x +=1; 
-                coches[7].x -=1;
+                coches[6].x +=2; 
+                coches[7].x -=2;
                 coches[8].x +=1;
                 coches[9].x -=1;
-                coches[10].x +=1;
-                coches[11].x -=1;
+                coches[10].x +=2;
+                coches[11].x -=2;
                 coches[12].x +=1;
                 coches[13].x -=1;
+                coches[14].x +=2;
+                coches[15].x -=2;
                // si=true;
                // console.log(si);
                //}
@@ -269,7 +292,20 @@
                 } else {
                     jugador.dibujar();
                 }
-               tablero()
+                tablero()
+                enemigo.mover();
+                if (Math.random() < 0.005) { // Dispara con una probabilidad del 1%
+                    enemigo.disparar();
+                }
+                enemigo.proyectiles.forEach((proyectil, index) => {
+                    proyectil.mover();
+                    proyectil.dibujar();
+
+                    // Elimina los proyectiles que salen del lienzo
+                    if (proyectil.y > canvas.height) {
+                        enemigo.proyectiles.splice(index, 1);
+                    }
+                });
                
             }else{
                 //ctx.fillStyle = "rgba(154,160,154,0.00000002)";
@@ -286,6 +322,7 @@
             if(pause==false){
                 console.log("dir " + dir);
                 checkCollisions();
+                checkCuadradoCollision();
 
                 switch (dir) {
                     case 1:
@@ -347,6 +384,79 @@
         // Dibujar el jugador en el lienzo
         //jugador.dibujar();
 
+        //Jefe
+        class Enemigo {
+            constructor() {
+                this.x = canvas.width - 235; // Coordenada X inicial (derecha de la pantalla)
+                this.y = -3550; // Coordenada Y inicial (posición vertical aleatoria)
+                this.width = 150; // Ancho del enemigo
+                this.height = 150; // Alto del enemigo
+                this.speed = -1; // Velocidad del enemigo (ajusta según tu preferencia)
+                this.proyectiles = [];
+            }
+
+            mover() {
+                // Mueve al enemigo de derecha a izquierda
+                this.x += this.speed;
+
+                // Si el enemigo llega al borde izquierdo de la pantalla, restablece su posición a la derecha
+               // Si el enemigo llega al borde derecho o izquierdo de la pantalla, cambia la dirección
+               if (this.x < 85 ) {
+                    this.speed=1;
+                }else if(this.x >canvas.width-235){
+                    this.speed=-1;
+                }
+            }
+
+            dibujar() {
+                // Dibuja el enemigo en el lienzo
+                // Puedes usar una imagen u otras formas de representación visual
+                //ctx.fillStyle = 'red'; // Color del enemigo (por ejemplo, rojo)
+                //ctx.fillRect(this.x, this.y, this.width, this.height);
+                ctx.drawImage(img8,this.x, this.y, this.width, this.height);
+            }
+
+            disparar() {
+                // Lógica para que el enemigo dispare proyectiles
+                // Implementa la lógica de disparo aquí
+                // Puedes crear una clase para los proyectiles y gestionar su movimiento y colisiones
+                // Asegúrate de establecer un temporizador para los disparos en el bucle de juego principal
+                const nuevoProyectil = new Proyectil(this.x + this.width / 2, this.y + this.height);
+                this.proyectiles.push(nuevoProyectil); 
+            }
+        }
+
+        const enemigo = new Enemigo();
+
+        // Función auxiliar para obtener una posición vertical aleatoria
+        function getRandomYPosition() {
+            // Devuelve una posición vertical dentro del área de juego (ajusta según tu preferencia)
+            return Math.floor(Math.random() * (canvas.height - 50)); // 50 es la altura del enemigo
+        }
+
+        class Proyectil {
+            constructor(x, y) {
+                this.x = x; // Coordenada X inicial
+                this.y = y; // Coordenada Y inicial
+                this.width = 20; // Ancho del proyectil
+                this.height = 50; // Alto del proyectil
+                this.speed = 2; // Velocidad del proyectil (ajusta según tu preferencia)
+            }
+
+            mover() {
+                this.y += this.speed; // Mover el proyectil hacia abajo
+            }
+
+            dibujar() {
+                //ctx.fillStyle = 'red'; // Color del proyectil (puedes personalizarlo)
+                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el proyectil
+                ctx.drawImage(img9,this.x, this.y, this.width, this.height);
+            }
+        }
+
+
+        
+/*
         class Rio{
             constructor(dy) {
                 this.x = 85; // Coordenada X inicial
@@ -370,7 +480,7 @@
         // Dibujar el Rio en el lienzo
         rio1.dibujar();
         rio2.dibujar();
-
+*/
         class Carretera{
             constructor(dy) {
                 this.x = 85; // Coordenada X inicial
@@ -450,7 +560,7 @@
 
         }
 
-        var posicionCochesX = [380,210,-120,-290,-570,-740,-970,-1140,-1370,-1540,-1770,-1940,-2170,-2340]
+        var posicionCochesX = [395,210,-105,-290,-555,-740,-955,-1140,-1355,-1540,-1755,-1940,-2155,-2340,-2655,-2840]
 
         var coches = [];
         var dentro = true;
@@ -483,9 +593,35 @@
                 ctx.drawImage(img6,85,this.y-630,this.width,this.height );
                 
             }
+            eliminar() {
+            // Elimina la instancia actual
+            // Establece todas las propiedades en null para ayudar al recolector de basura
+            this.x = null;
+            this.y = null;
+            this.width = null;
+            this.height = null;
+        }
            
         }
         const estacionamiento = new Estacionamiento(-3500);
+
+        class Cuadrado {
+            constructor() {
+                this.x = 100//Math.random() * (canvas.width - 50); // Posición X aleatoria
+                this.y = -3000//Math.random() * (canvas.height - 50); // Posición Y aleatoria
+                this.width = 50; // Ancho del cuadrado
+                this.height = 50; // Alto del cuadrado
+                this.speed = 1; // Velocidad del cuadrado (ajusta según tu preferencia)
+            }
+
+            dibujar() {
+                //ctx.fillStyle = 'green'; // Color del cuadrado (puedes personalizarlo)
+                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadrado
+                ctx.drawImage(img10,this.x, this.y, this.width, this.height);
+            }
+
+        }
+        const cuadradoAleatorio = new Cuadrado();
 
         
         
@@ -507,9 +643,12 @@
             cespedes[i].dibujar();
             }
             estacionamiento.dibujar();
+            enemigo.dibujar();
             for (var i=0;i<cantidadDe;i++){
                 carreteras[i].dibujar();
             }
+            cuadradoAleatorio.dibujar();
+
             
             //carretera.dibujar(); 
             //carretera2.dibujar(); 
@@ -543,9 +682,11 @@
             trayecto += dy;
          }
 
-         rio1.y += dy;
-         rio2.y += dy;
+         //rio1.y += dy;
+         //rio2.y += dy;
          estacionamiento.y += dy;
+         enemigo.y += dy;
+         cuadradoAleatorio.y += dy;
 
          for (var i=0;i<cantidadDe;i++){
             carreteras[i].y += dy;
@@ -576,7 +717,24 @@
                         jugador.y + jugador.height > coche.y
                     ) {
                         // Colisión detectada mientras no esté invulnerable
+                        audio2.play();
+                        audio3.play();
                         handleCollision();
+                    }
+                }
+                for (let i = 0; i < enemigo.proyectiles.length; i++) {
+                    const disparo = enemigo.proyectiles[i];
+                    if (
+                        jugador.x < disparo.x + disparo.width &&
+                        jugador.x + jugador.width > disparo.x &&
+                        jugador.y < disparo.y + disparo.height &&
+                        jugador.y + jugador.height > disparo.y
+                    ) {
+                        // Colisión detectada, quita una vida al jugador y elimina el disparo
+                        audio2.play();
+                        handleCollision();
+                        audio7.play();
+                        enemigo.proyectiles.splice(i, 1);
                     }
                 }
             }
@@ -591,8 +749,7 @@
                 // Reubicar al jugador en una posición segura después de la colisión.
                 jugador.x = (canvas.width / 2) - 25;
                 jugador.y = 600;
-                audio2.play();
-                audio3.play();
+                
                 if (vida <= 0) {
                     pause = true;
                     gameOverScreen = true; // Establece el estado de "Game Over" cuando se agoten las vidas
@@ -604,7 +761,42 @@
                 }, invulnerabilityDuration);
             }
         }
+        function checkCuadradoCollision() {
+            if (
+                jugador.x < cuadradoAleatorio.x + cuadradoAleatorio.width &&
+                jugador.x + jugador.width > cuadradoAleatorio.x &&
+                jugador.y < cuadradoAleatorio.y + cuadradoAleatorio.height &&
+                jugador.y + jugador.height > cuadradoAleatorio.y
+            ) {
+                audio8.play();
+                vidasEnemigo--;
+                if (vidasEnemigo === 0) {
+                    gameOverScreen = true;
+                    //reiniciarJuego(); // Implementa esta función según tus necesidades
+                }
+                cuadradoAleatorio.x =85 + Math.random() * (canvas.width - 135 - 85);
+                switch (Math.floor(Math.random() * 2) + 1) {
+                    case 1:
+                        if (cuadradoAleatorio.y < 415) {
+                            cuadradoAleatorio.y += 50;
+                        }
+                        break;
+
+                    case 2:
+                        if (cuadradoAleatorio.y > 265) {
+                            cuadradoAleatorio.y -= 50;
+                        }
+                        break;
+                }
+                console.log(cuadradoAleatorio.y);
+                // Colisión detectada entre el jugador y el cuadrado
+                // Realiza la lógica para quitar una vida al enemigo aquí
+                // También puedes hacer que el cuadrado desaparezca o reaparezca en otro lugar si es necesario
+            }
+        }
+
         function displayGameOverScreen() {
+            audio.loop = false;
             audio.pause();
             audio5.play();
             ctx.fillStyle = "rgba(0, 0, 0, 0.7)"; // Fondo oscuro
@@ -612,10 +804,16 @@
 
             ctx.font = "40px Arial";
             ctx.fillStyle = "white";
-            ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2 - 40);
-
+            if(vida>0){
+                ctx.fillText("   Victoria", canvas.width / 2 - 100, canvas.height / 2 - 40);  
+                ctx.fillStyle = "green";  
+            }else{
+                ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2 - 40);
+                ctx.fillStyle = "red";
+            }
+        
             // Dibuja el botón de "Volver a Empezar"
-            ctx.fillStyle = "red";
+            
             ctx.fillRect(canvas.width / 2 - 160, canvas.height / 2 + 20, 320, 40);
             ctx.fillStyle = "white";
             ctx.fillText("Volver a Empezar", canvas.width / 2 - 160, canvas.height / 2 + 50);
@@ -640,7 +838,57 @@
                 gameOverScreen = false;
                 vida = 3; // Restablece las vidas u otros valores del juego según sea necesario.
                 pause=false;
-                location.reload();
+                if(vida>0){
+                    nivel ++;
+                    //
+                    mainX=0, mainY=0, vida=10;
+                    pause=false;
+                    dir, paso=30,trayecto=50, cantidadDe=8;
+                    invulnerable = false;
+                    invulnerabilityDuration = 1000; // 2 segundos en milisegundos
+                    lastCollisionTime = 0;
+                    gameOverScreen = false;
+                    minutos = 0;
+                    vsegundos = 0;
+                    console.log(canvas.width);
+                    vidasEnemigo = 8;
+                    carreteras.splice(0, carreteras.length);
+                    posicionCarreteraX = [-250,-750,-1200,-1600,-2000,-2400,-2800,-3300]
+                    carreteras = [];
+                    for (var i=0;i<cantidadDe;i++){
+                        carreteras.push(new Carretera(posicionCarreteraX[i]));
+                    }
+                    cespedes.splice(0, carreteras.length);
+                    posicionCespedX = [50,-500,-1000,-1400,-1800,-2200,-2600,-3000]
+                    cespedes = [];
+                    for (var i=0;i<cantidadDe;i++){
+                        cespedes.push(new Cesped(posicionCespedX[i]));
+                    }
+                    coches.splice(0, carreteras.length);
+                    osicionCochesX = [395,210,-105,-290,-555,-740,-955,-1140,-1355,-1540,-1755,-1940,-2155,-2340,-2655,-2840]
+                    coches = [];
+                    dentro = true;
+                    for (var i=0;i<cantidadDe*2;i++){
+                        
+                        if (dentro == true){
+                            coches.push(new Coche(posicionCochesX[i],100,img3));
+                            dentro=false;
+                        }else{
+                            coches.push(new Coche(posicionCochesX[i],100,img4));
+                            dentro=true;
+                        }
+                        
+
+                    }
+                    estacionamiento.eliminar();
+                    estacionamiento = new Estacionamiento(-3500);
+                    
+                    
+                    //
+                }else{
+                    location.reload();
+                }
+                
                 // Otras reinicializaciones del juego...
 
                 // Elimina el detector de clic para evitar múltiples clics accidentales
@@ -648,20 +896,20 @@
             }
         }
         function getTiempoFormateado() {
-    var minutosStr = minutos < 10 ? "0" + minutos : minutos.toString();
-    var segundosStr = segundos < 10 ? "0" + segundos : segundos.toString();
-    return minutosStr + ":" + segundosStr;
-}
+            var minutosStr = minutos < 10 ? "0" + minutos : minutos.toString();
+            var segundosStr = segundos < 10 ? "0" + segundos : segundos.toString();
+            return minutosStr + ":" + segundosStr;
+        }
 
-// Actualiza el cronómetro cada segundo
-setInterval(function () {
-    segundos++;
-    if (segundos === 60) {
-        minutos++;
-        segundos = 0;
-    }
-    repaint(); // Vuelve a dibujar para mostrar el tiempo actualizado
-}, 1000);
+        // Actualiza el cronómetro cada segundo
+        setInterval(function () {
+            segundos++;
+            if (segundos === 60) {
+                minutos++;
+                segundos = 0;
+            }
+            repaint(); // Vuelve a dibujar para mostrar el tiempo actualizado
+        }, 1000);
 
 
 
