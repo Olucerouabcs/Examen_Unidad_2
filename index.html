@@ -26,7 +26,7 @@
         var pause=false;
         var dir, paso=30,trayecto=50, cantidadDe=8;
         var invulnerable = false;
-        var invulnerabilityDuration = 500; 
+        var invulnerabilityDuration = 1000; 
         var lastCollisionTime = 0;
         var gameOverScreen = false;
         var minutos = 0;
@@ -34,6 +34,7 @@
         var nivel=1;
         var velocidadCoches=1;
         let vidasEnemigo = 3;
+        var objetosObtenidos=0;
         let imgPlayer = new Image();
         let img = new Image();
         let img2 = new Image();
@@ -45,6 +46,7 @@
         let img8 = new Image();
         let img9 = new Image();
         let img10 = new Image();
+        let img11 = new Image();
         let audio = new Audio();
         let audio2 = new Audio();
         let audio3 = new Audio();
@@ -55,6 +57,7 @@
         let audio8 = new Audio();
         let audio9 = new Audio();
         let audio10 = new Audio();
+        let audio11 = new Audio();
         audio.src = 'Blippy_Trance.mp3';
         audio.loop = true
         audio.volume = 0.4;
@@ -71,6 +74,7 @@
         audio8.src = 'boton.mp3';
         audio9.src ='victoria.mp3'; 
         audio10.src ='gritos.mp3'; 
+        audio11.src ='pollito.mp3'; 
         img.src = 'cesped.png';
         img2.src = 'carreteraH.png';
         img3.src = 'carroRojo-2.png';
@@ -81,6 +85,7 @@
         img8.src = 'jefe.png'
         img9.src = 'cuchillo.png';
         img10.src = 'huevo.png';
+        img11.src = 'pollito.png';
         imgPlayer.src = 'Player.png';
 
         function tablero(){
@@ -101,6 +106,8 @@
             ctx.fillText(nivel , 60, 130)
             ctx.fillText("Vidas" , 10, 210);
             ctx.fillText(vida , 10, 240);
+            ctx.fillText("Pollitos" , 10, 300);
+            ctx.fillText(objetosObtenidos , 10, 330);
 
             if(nivel==2){
                 ctx.fillStyle = "rgba(255, 165, 0, 0.3)"; 
@@ -118,60 +125,60 @@
             console.log(e);
             
             switch (e.keyCode) {
-        case 87:
-            if (!pause) { 
-                audio6.play();
-                dir = 1;
-                if(trayecto>=32930){
-                    moveObjetos(0,0);
-                }else{
-                    moveObjetos(0,paso);
-                    console.log("Arriba");
-                }
-            }
-            break;
-        case 83:
-            if (!pause) { 
-                audio6.play();
-                dir = 2;
-                if(trayecto<70){
-                    moveObjetos(0,0);
-                }else{
-                    moveObjetos(0,-paso);
-                    console.log("Abajo");
-                }
+                case 87:
+                    if (!pause) { 
+                        audio6.play();
+                        dir = 1;
+                        if(trayecto>=32930){
+                            moveObjetos(0,0);
+                        }else{
+                            moveObjetos(0,paso);
+                            console.log("Arriba");
+                        }
+                    }
+                    break;
+                case 83:
+                    if (!pause) { 
+                        audio6.play();
+                        dir = 2;
+                        if(trayecto<70){
+                            moveObjetos(0,0);
+                        }else{
+                            moveObjetos(0,-paso);
+                            console.log("Abajo");
+                        }
 
-            }
-            break;
-        case 68:
-            if (!pause) { 
-                audio6.play();
-                dir = 3;
-                if(jugador.x>550){
-                    movePlayer(0,0);    
-                }else{
-                    movePlayer(paso,0);
-                }
+                    }
+                    break;
+                case 68:
+                    if (!pause) { 
+                        audio6.play();
+                        dir = 3;
+                        if(jugador.x>550){
+                            movePlayer(0,0);    
+                        }else{
+                            movePlayer(paso,0);
+                        }
 
-            }
-            break;
-        case 65:
-            if (!pause) { 
-                audio6.play();
-                dir = 4;
-                if(jugador.x<90){
-                    movePlayer(0,0);    
-                }else{
-                    movePlayer(-paso,0);
+                    }
+                    break;
+                case 65:
+                    if (!pause) { 
+                        audio6.play();
+                        dir = 4;
+                        if(jugador.x<90){
+                            movePlayer(0,0);    
+                        }else{
+                            movePlayer(-paso,0);
+                        }
+                        console.log("x: "+jugador.x );
+                        console.log("izquierda");
+                    }
+                    break;
+                case 32:
+                    pause = !pause;
+                    break;
                 }
-                console.log("x: "+jugador.x );
-                console.log("izquierda");
-            }
-            break;
-        case 32:
-            pause = !pause;
-            break;
-        }
 
         });
 
@@ -180,67 +187,51 @@
 
                if(coches[0].x>=630){
                 coches[0].x =10;
-                  console.log(si);
                }
                if(coches[1].x<=10 ){
                 coches[1].x =630;
-                  console.log(si);
                }
                if(coches[2].x>=630){
                 coches[2].x =10;
-                  console.log(si);
                }
                if(coches[3].x<=10 ){
                 coches[3].x =630;
-                  console.log(si);
                }
                if(coches[4].x>=630){
                 coches[4].x =10;
-                  console.log(si);
                }
                if(coches[5].x<=10 ){
                 coches[5].x =630;
-                  console.log(si);
                }
                if(coches[6].x>=630){
                 coches[6].x =10;
-                  console.log(si);
                }
                if(coches[7].x<=10 ){
                 coches[7].x =630;
-                  console.log(si);
                }
                if(coches[8].x>=630){
                 coches[8].x =10;
-                  console.log(si);
                }
                if(coches[9].x<=10 ){
                 coches[9].x =630;
-                  console.log(si);
                }
                if(coches[10].x>=630){
                 coches[10].x =10;
-                  console.log(si);
                }
                if(coches[11].x<=10 ){
                 coches[11].x =630;
-                  console.log(si);
                }
                if(coches[12].x>=630){
                 coches[12].x =10;
-                  console.log(si);
                }
                if(coches[13].x<=10 ){
                 coches[13].x =630;
-                  console.log(si);
                }
                if(coches[14].x>=630){
                 coches[14].x =10;
-                  console.log(si);
                }
                if(coches[15].x<=10 ){
                 coches[15].x =630;
-                  console.log(si);
                }
                 coches[0].x +=velocidadCoches; 
                 coches[1].x -=velocidadCoches;
@@ -297,6 +288,7 @@
                 console.log("dir " + dir);
                 checkCollisions();
                 checkCuadradoCollision();
+                checkObjetoCollision();
             }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (gameOverScreen) {
@@ -532,6 +524,28 @@
         }
         let cuadradoAleatorio = new Cuadrado();
 
+        class Objeto {
+            constructor() {
+                this.x = 100;
+                this.y = 100;
+                this.width = 50; 
+                this.height = 50; 
+            }
+
+            dibujar() {
+
+                ctx.drawImage(img11,this.x, this.y, this.width, this.height);
+            }
+            eliminar() {
+            this.x = null;
+            this.y = null;
+            this.width = null;
+            this.height = null;
+            }
+
+        }
+        let objetoAleatorio = new Objeto();
+
         function repintarObjetos(){
            
             for (var i=0;i<cantidadDe;i++){
@@ -543,6 +557,7 @@
                 carreteras[i].dibujar();
             }
             cuadradoAleatorio.dibujar();
+            objetoAleatorio.dibujar();
 
             for (var i=0;i<cantidadDe*2;i++){
                 coches[i].dibujar();
@@ -553,12 +568,8 @@
 
         function movePlayer(dx, dy) {
             if (!pause) {
-                if (enBalsa) {
-                    jugador.x += 1; 
-                } else {
-                    jugador.x += dx;
-                    jugador.y += dy;
-                }
+                jugador.x += dx;
+                jugador.y += dy;
                 repaint();
             }
         }
@@ -573,6 +584,7 @@
          estacionamiento.y += dy;
          enemigo.y += dy;
          cuadradoAleatorio.y += dy;
+         objetoAleatorio.y += dy;
 
          for (var i=0;i<cantidadDe;i++){
             carreteras[i].y += dy;
@@ -647,8 +659,10 @@
             ) {
                 audio8.play();
                 vidasEnemigo--;
-                if (vidasEnemigo === 0) {
+                if (vidasEnemigo === 0 && objetosObtenidos >= 10) {
                     gameOverScreen = true;
+                }else if(vidasEnemigo === 0){
+                    cuadradoAleatorio.eliminar();
                 }
                 cuadradoAleatorio.x =85 + Math.random() * (canvas.width - 135 - 85);
                 switch (Math.floor(Math.random() * 2) + 1) {
@@ -667,6 +681,23 @@
                 console.log(cuadradoAleatorio.y);
             }
         }
+        function checkObjetoCollision() {
+            if (
+                jugador.x < objetoAleatorio.x + objetoAleatorio.width &&
+                jugador.x + jugador.width > objetoAleatorio.x &&
+                jugador.y < objetoAleatorio.y + objetoAleatorio.height &&
+                jugador.y + jugador.height > objetoAleatorio.y
+            ) {
+                if(objetosObtenidos === 9){
+                    objetoAleatorio.eliminar();
+                }
+                audio11.play();
+                objetosObtenidos++;
+                objetoAleatorio.x = 100 + Math.random() * (canvas.width - 285);
+                objetoAleatorio.y = Math.random() * (canvas.height - 100);
+            }
+        }
+
 
         function displayGameOverScreen() {
 
@@ -753,7 +784,7 @@
                         cespedes.push(new Cesped(posicionCespedX[i]));
                     }
                     coches.splice(0, carreteras.length);
-                    osicionCochesX = [395,210,-105,-290,-555,-740,-955,-1140,-1355,-1540,-1755,-1940,-2155,-2340,-2655,-2840]
+                    posicionCochesX = [395,210,-105,-290,-555,-740,-955,-1140,-1355,-1540,-1755,-1940,-2155,-2340,-2655,-2840]
                     coches = [];
                     dentro = true;
                     for (var i=0;i<cantidadDe*2;i++){
@@ -772,16 +803,21 @@
                     estacionamiento = new Estacionamiento(-3500);
                     cuadradoAleatorio.eliminar();
                     cuadradoAleatorio = new Cuadrado();
+                    objetoAleatorio.eliminar();
+                    objetoAleatorio = new Objeto();
+                    objetoAleatorio.x = 100;
+                    objetoAleatorio.y = 100;
+                    objetosObtenidos=0;
                     enemigo.proyectiles.splice(0,enemigo.proyectiles.length );
                     enemigo.eliminar();
                     enemigo = new Enemigo();
-                    velocidadCoches+=1;
                     if(nivel==2){
                         audio.loop = false;
                         audio.pause();
                         audio.src='Captain_Scurvy.mp3';
                         audio.play();
                         vidasEnemigo=5;
+                        velocidadCoches=1.5;
                        
                     }else if(nivel==3){
                         audio.loop = false;
@@ -789,6 +825,8 @@
                         audio.src='Voxel_Revolution.mp3';
                         audio.play();
                         vidasEnemigo=8;
+                        velocidadCoches=2.5;
+                        
                     }
                     if(nivel==4){
                         location.reload();
