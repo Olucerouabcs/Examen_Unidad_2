@@ -109,6 +109,22 @@
             ctx.fillText("Pollitos" , 10, 300);
             ctx.fillText(objetosObtenidos , 10, 330);
 
+            ctx.font = "20px Arial";
+            ctx.fillText("Moverte:" , canvas.width-80, 40);
+            ctx.fillText("WASD" , canvas.width-80, 70);
+
+            ctx.font = "12px Arial";
+            ctx.fillText("Para ganar" , canvas.width-80, 120);
+            ctx.fillText("debes tomar" , canvas.width-80, 135);
+            ctx.fillText("10 pollitos y " , canvas.width-80, 150);
+            ctx.fillText("recoger los " , canvas.width-80, 165);
+            ctx.fillText("huevos " , canvas.width-80, 180);
+            ctx.fillText("al final." , canvas.width-80, 195);
+
+            ctx.fillText("Evita los" , canvas.width-80, 235);
+            ctx.fillText("cuchillos y " , canvas.width-80, 250);
+            ctx.fillText("autos" , canvas.width-80, 265);
+
             if(nivel==2){
                 ctx.fillStyle = "rgba(255, 165, 0, 0.3)"; 
                 ctx.fillRect(85, 0, canvas.width-170, canvas.height);
