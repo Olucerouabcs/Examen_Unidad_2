@@ -22,18 +22,18 @@
         var canvas = document.getElementById('myCanvas'); 
         var ctx = canvas.getContext("2d");
 
-        var mainX=0, mainY=0, vida=10;
+        var vida=10;
         var pause=false;
         var dir, paso=30,trayecto=50, cantidadDe=8;
         var invulnerable = false;
-        var invulnerabilityDuration = 1000; // 2 segundos en milisegundos
+        var invulnerabilityDuration = 500; 
         var lastCollisionTime = 0;
         var gameOverScreen = false;
         var minutos = 0;
         var segundos = 0;
         var nivel=1;
-        console.log(canvas.width);
-        let vidasEnemigo = 1;
+        var velocidadCoches=1;
+        let vidasEnemigo = 3;
         let imgPlayer = new Image();
         let img = new Image();
         let img2 = new Image();
@@ -53,6 +53,8 @@
         let audio6 = new Audio();
         let audio7 = new Audio();
         let audio8 = new Audio();
+        let audio9 = new Audio();
+        let audio10 = new Audio();
         audio.src = 'Blippy_Trance.mp3';
         audio.loop = true
         audio.volume = 0.4;
@@ -67,7 +69,8 @@
         audio6.volume = 1;
         audio7.src = 'cuchillaso.mp3';
         audio8.src = 'boton.mp3';
-        //audio.play();
+        audio9.src ='victoria.mp3'; 
+        audio10.src ='gritos.mp3'; 
         img.src = 'cesped.png';
         img2.src = 'carreteraH.png';
         img3.src = 'carroRojo-2.png';
@@ -79,11 +82,6 @@
         img9.src = 'cuchillo.png';
         img10.src = 'huevo.png';
         imgPlayer.src = 'Player.png';
-        //ctx.drawImage(img2, x2, y2, 100, 100); 
-
-        var enBalsa = false;
-        
-        var si =true;
 
         function tablero(){
            
@@ -98,15 +96,20 @@
             ctx.font = "20px Arial";
             ctx.fillStyle = "black"; 
             ctx.fillText("Tiempo" , 10, 40)
-            //Poner que funcione el tiempo
-            ctx.fillText(getTiempoFormateado(), 10, 70); // Llama a una función para obtener el tiempo formateado
+            ctx.fillText(getTiempoFormateado(), 10, 70); 
             ctx.fillText("Nivel" , 10, 130)
-            //Poner que funcione el contador de nivel
             ctx.fillText(nivel , 60, 130)
-        
-            //Contador de vidas
             ctx.fillText("Vidas" , 10, 210);
             ctx.fillText(vida , 10, 240);
+
+            if(nivel==2){
+                ctx.fillStyle = "rgba(255, 165, 0, 0.3)"; 
+                ctx.fillRect(85, 0, canvas.width-170, canvas.height);
+            }else if(nivel==3){
+                ctx.fillStyle = "rgba(0, 0, 100, 0.5)";
+                ctx.fillRect(85, 0, canvas.width-170, canvas.height);
+
+            }
         }
 
         tablero();
@@ -172,119 +175,93 @@
 
         });
 
-
-
         function repaint() {
             if(!pause){
-                
-                //ctx.fillStyle = "white";
-                //ctx.fillRect(0, 0, 700, 900);
 
-               if(coches[0].x==630){//|| si ==false
+               if(coches[0].x>=630){
                 coches[0].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[1].x==10 ){//|| si ==false
+               if(coches[1].x<=10 ){
                 coches[1].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[2].x==630){//|| si ==false
+               if(coches[2].x>=630){
                 coches[2].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[3].x==10 ){//|| si ==false
+               if(coches[3].x<=10 ){
                 coches[3].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[4].x==630){//|| si ==false
+               if(coches[4].x>=630){
                 coches[4].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[5].x==10 ){//|| si ==false
+               if(coches[5].x<=10 ){
                 coches[5].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[6].x==630){//|| si ==false
+               if(coches[6].x>=630){
                 coches[6].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[7].x==10 ){//|| si ==false
+               if(coches[7].x<=10 ){
                 coches[7].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[8].x==630){//|| si ==false
+               if(coches[8].x>=630){
                 coches[8].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[9].x==10 ){//|| si ==false
+               if(coches[9].x<=10 ){
                 coches[9].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[10].x==630){//|| si ==false
+               if(coches[10].x>=630){
                 coches[10].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[11].x==10 ){//|| si ==false
+               if(coches[11].x<=10 ){
                 coches[11].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[12].x==630){//|| si ==false
+               if(coches[12].x>=630){
                 coches[12].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[13].x==10 ){//|| si ==false
+               if(coches[13].x<=10 ){
                 coches[13].x =630;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[14].x==630){//|| si ==false
+               if(coches[14].x>=630){
                 coches[14].x =10;
-                  //si=false;
                   console.log(si);
                }
-               if(coches[15].x==10 ){//|| si ==false
+               if(coches[15].x<=10 ){
                 coches[15].x =630;
-                  //si=false;
                   console.log(si);
                }
-               //if(coche.x==85||si==true){
-                coches[0].x +=1; 
-                coches[1].x -=1;
-                coches[2].x +=2;
-                coches[3].x -=2;
-                coches[4].x +=1;
-                coches[5].x -=1;
-                coches[6].x +=2; 
-                coches[7].x -=2;
-                coches[8].x +=1;
-                coches[9].x -=1;
-                coches[10].x +=2;
-                coches[11].x -=2;
-                coches[12].x +=1;
-                coches[13].x -=1;
-                coches[14].x +=2;
-                coches[15].x -=2;
-               // si=true;
-               // console.log(si);
-               //}
+                coches[0].x +=velocidadCoches; 
+                coches[1].x -=velocidadCoches;
+                coches[2].x +=velocidadCoches;
+                coches[3].x -=velocidadCoches;
+                coches[4].x +=velocidadCoches;
+                coches[5].x -=velocidadCoches;
+                coches[6].x +=velocidadCoches; 
+                coches[7].x -=velocidadCoches;
+                coches[8].x +=velocidadCoches;
+                coches[9].x -=velocidadCoches;
+                coches[10].x +=velocidadCoches;
+                coches[11].x -=velocidadCoches;
+                coches[12].x +=velocidadCoches;
+                coches[13].x -=velocidadCoches;
+                coches[14].x +=velocidadCoches;
+                coches[15].x -=velocidadCoches;
 
                repintarObjetos();
                
                 if (invulnerable) {
-                    // Cambia el estado de visibilidad del jugador cada 200 ms para el efecto de parpadeo.
                     if (Date.now() - lastCollisionTime > 100) {
                         jugador.dibujar();
                     }
@@ -294,22 +271,19 @@
                 }
                 tablero()
                 enemigo.mover();
-                if (Math.random() < 0.005) { // Dispara con una probabilidad del 1%
+                if (Math.random() < 0.005) {
                     enemigo.disparar();
                 }
                 enemigo.proyectiles.forEach((proyectil, index) => {
                     proyectil.mover();
                     proyectil.dibujar();
 
-                    // Elimina los proyectiles que salen del lienzo
                     if (proyectil.y > canvas.height) {
                         enemigo.proyectiles.splice(index, 1);
                     }
                 });
                
-            }else{
-                //ctx.fillStyle = "rgba(154,160,154,0.00000002)";
-                //ctx.fillRect(85, 0, 700, 900);
+            }else{ 
 
                 ctx.font = "40px Arial";
                 ctx.fillStyle = "black"; 
@@ -323,23 +297,6 @@
                 console.log("dir " + dir);
                 checkCollisions();
                 checkCuadradoCollision();
-
-                switch (dir) {
-                    case 1:
-                        //cesped.y += paso;
-                        break;
-                    case 2:
-                        //cesped.y -= paso;
-                        break;
-                    case 3:
-                        //jugador.x += paso;
-
-                        break;
-                    case 4:
-                        //jugador.x -= paso;
-
-                        break;
-                }
             }
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (gameOverScreen) {
@@ -364,43 +321,34 @@
 
         class Jugador {
             constructor() {
-                this.x = (canvas.width/2)-35; // Coordenada X inicial
-                this.y = 600; // Coordenada Y inicial
-                this.width = 70; // Ancho del cuadro
-                this.height = 70; // Alto del cuadro
+                this.x = (canvas.width/2)-35; 
+                this.y = 600; 
+                this.width = 70; 
+                this.height = 70;
             }
 
             dibujar() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                //ctx.fillStyle = 'black'; // Color del cuadro (en este caso, azul)
-                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
                 ctx.drawImage(imgPlayer,this.x, this.y, this.width, this.height);
             }
         }
 
-        // Crear una instancia de Jugador
+
         const jugador = new Jugador();
 
-        // Dibujar el jugador en el lienzo
-        //jugador.dibujar();
-
-        //Jefe
         class Enemigo {
             constructor() {
-                this.x = canvas.width - 235; // Coordenada X inicial (derecha de la pantalla)
-                this.y = -3550; // Coordenada Y inicial (posición vertical aleatoria)
-                this.width = 150; // Ancho del enemigo
-                this.height = 150; // Alto del enemigo
-                this.speed = -1; // Velocidad del enemigo (ajusta según tu preferencia)
+                this.x = canvas.width - 235;
+                this.y = -3550; 
+                this.width = 150;
+                this.height = 150; 
+                this.speed = -1;
                 this.proyectiles = [];
             }
 
             mover() {
-                // Mueve al enemigo de derecha a izquierda
+
                 this.x += this.speed;
 
-                // Si el enemigo llega al borde izquierdo de la pantalla, restablece su posición a la derecha
-               // Si el enemigo llega al borde derecho o izquierdo de la pantalla, cambia la dirección
                if (this.x < 85 ) {
                     this.speed=1;
                 }else if(this.x >canvas.width-235){
@@ -409,97 +357,70 @@
             }
 
             dibujar() {
-                // Dibuja el enemigo en el lienzo
-                // Puedes usar una imagen u otras formas de representación visual
-                //ctx.fillStyle = 'red'; // Color del enemigo (por ejemplo, rojo)
-                //ctx.fillRect(this.x, this.y, this.width, this.height);
+
                 ctx.drawImage(img8,this.x, this.y, this.width, this.height);
             }
 
             disparar() {
-                // Lógica para que el enemigo dispare proyectiles
-                // Implementa la lógica de disparo aquí
-                // Puedes crear una clase para los proyectiles y gestionar su movimiento y colisiones
-                // Asegúrate de establecer un temporizador para los disparos en el bucle de juego principal
+
                 const nuevoProyectil = new Proyectil(this.x + this.width / 2, this.y + this.height);
                 this.proyectiles.push(nuevoProyectil); 
             }
+            eliminar() {
+
+            this.x = null;
+            this.y = null;
+            this.width = null;
+            this.height = null;
+            }
         }
 
-        const enemigo = new Enemigo();
+        let enemigo = new Enemigo();
 
-        // Función auxiliar para obtener una posición vertical aleatoria
+
         function getRandomYPosition() {
-            // Devuelve una posición vertical dentro del área de juego (ajusta según tu preferencia)
-            return Math.floor(Math.random() * (canvas.height - 50)); // 50 es la altura del enemigo
+
+            return Math.floor(Math.random() * (canvas.height - 50)); 
         }
 
         class Proyectil {
             constructor(x, y) {
-                this.x = x; // Coordenada X inicial
-                this.y = y; // Coordenada Y inicial
-                this.width = 20; // Ancho del proyectil
-                this.height = 50; // Alto del proyectil
-                this.speed = 2; // Velocidad del proyectil (ajusta según tu preferencia)
+                this.x = x; 
+                this.y = y; 
+                this.width = 20; 
+                this.height = 50; 
+                this.speed = 2; 
             }
 
             mover() {
-                this.y += this.speed; // Mover el proyectil hacia abajo
+                this.y += this.speed; 
             }
 
             dibujar() {
-                //ctx.fillStyle = 'red'; // Color del proyectil (puedes personalizarlo)
-                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el proyectil
+
                 ctx.drawImage(img9,this.x, this.y, this.width, this.height);
             }
         }
 
 
         
-/*
-        class Rio{
-            constructor(dy) {
-                this.x = 85; // Coordenada X inicial
-                this.y = dy; // Coordenada Y inicial
-                this.width = 530; // Ancho del cuadro
-                this.height = 300; // Alto del cuadro
-            }
-
-            dibujar() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                ctx.fillStyle = 'blue'; // Color del cuadro (en este caso, azul)
-                ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
-            }
-
-        }
-
-        // Crear una instancia de Jugador
-        const rio1 = new Rio(200);
-        const rio2 = new Rio(-500);
-
-        // Dibujar el Rio en el lienzo
-        rio1.dibujar();
-        rio2.dibujar();
-*/
         class Carretera{
             constructor(dy) {
-                this.x = 85; // Coordenada X inicial
-                this.y = dy; // Coordenada Y inicial
-                this.width = 530; // Ancho del cuadro
-                this.height = 1200; // Alto del cuadro
+                this.x = 85; 
+                this.y = dy; 
+                this.width = 530; 
+                this.height = 1200; 
                 
             }
 
             dibujar() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                //ctx.fillStyle = 'grey'; // Color del cuadro (en este caso, azul)
-                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
+
                 ctx.drawImage(img2,this.x, this.y, this.width, this.height);
             }
 
         }
 
-        // Crear una instancia de cesped
+
         var posicionCarreteraX = [-250,-750,-1200,-1600,-2000,-2400,-2800,-3300]
 
         var carreteras = [];
@@ -507,54 +428,40 @@
             carreteras.push(new Carretera(posicionCarreteraX[i]));
         }
 
-        // Dibujar el carretera en el lienzo
-        //carretera.dibujar();
 
         class Cesped{
             constructor(dy) {
-                this.x = 85; // Coordenada X inicial
-                this.y = dy; // Coordenada Y inicial
-                this.width = 530; // Ancho del cuadro
-                this.height = 700; // Alto del cuadro
+                this.x = 85; 
+                this.y = dy; 
+                this.width = 530; 
+                this.height = 700; 
             }
 
             dibujar() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                //ctx.fillStyle = 'green'; // Color del cuadro (en este caso, azul)
-                ctx.drawImage(img,this.x, this.y, this.width, this.height); // Dibujar el cuadro
+
+                ctx.drawImage(img,this.x, this.y, this.width, this.height); 
             }
 
         }
 
-        // Crear una instancia de cesped
         var posicionCespedX = [50,-500,-1000,-1400,-1800,-2200,-2600,-3000]
 
         var cespedes = [];
         for (var i=0;i<cantidadDe;i++){
             cespedes.push(new Cesped(posicionCespedX[i]));
         }
-        //const cesped = new Cesped(50);
-        //const cesped2 = new Cesped(-500);
-        //const cesped3 = new Cesped(-1400);
-        //const cesped4 = new Cesped(-1000);
-
-
-        // Dibujar el cesped en el lienzo
-        //cesped.dibujar();
         
         class Coche{
             constructor(dy,dx,img) {
-                this.x = dx; // Coordenada X inicial
-                this.y = dy; // Coordenada Y inicial
-                this.width = 120; // Ancho del cuadro
-                this.height = 85; // Alto del cuadro
+                this.x = dx; 
+                this.y = dy; 
+                this.width = 120; 
+                this.height = 85;
                 this.img = img;
             }
 
             dibujar() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                //ctx.fillStyle = 'yellow'; // Color del cuadro (en este caso, azul)
-                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
+
                 ctx.drawImage(this.img,this.x, this.y, this.width, this.height);
             }
 
@@ -578,66 +485,54 @@
         }
         class Estacionamiento{
             constructor(dy) {
-                this.x = 85; // Coordenada X inicial
-                this.y = dy; // Coordenada Y inicialww
-                this.width = 530; // Ancho del cuadro
-                this.height = 800; // Alto del cuadro
+                this.x = 85; 
+                this.y = dy; 
+                this.width = 530; 
+                this.height = 800; 
             }
 
             dibujar() {
-                //ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el lienzo
-                //ctx.fillStyle = 'yellow'; // Color del cuadro (en este caso, azul)
-                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadro
+
                 ctx.drawImage(img5,85,this.y,this.width,this.height );
                 ctx.drawImage(img7,85,this.y-750,this.width,this.height );
                 ctx.drawImage(img6,85,this.y-630,this.width,this.height );
                 
             }
             eliminar() {
-            // Elimina la instancia actual
-            // Establece todas las propiedades en null para ayudar al recolector de basura
+
             this.x = null;
             this.y = null;
             this.width = null;
             this.height = null;
-        }
+            }
            
         }
-        const estacionamiento = new Estacionamiento(-3500);
+        let estacionamiento = new Estacionamiento(-3500);
 
         class Cuadrado {
             constructor() {
-                this.x = 100//Math.random() * (canvas.width - 50); // Posición X aleatoria
-                this.y = -3000//Math.random() * (canvas.height - 50); // Posición Y aleatoria
-                this.width = 50; // Ancho del cuadrado
-                this.height = 50; // Alto del cuadrado
-                this.speed = 1; // Velocidad del cuadrado (ajusta según tu preferencia)
+                this.x = 100
+                this.y = -3000
+                this.width = 50; 
+                this.height = 50; 
             }
 
             dibujar() {
-                //ctx.fillStyle = 'green'; // Color del cuadrado (puedes personalizarlo)
-                //ctx.fillRect(this.x, this.y, this.width, this.height); // Dibujar el cuadrado
+
                 ctx.drawImage(img10,this.x, this.y, this.width, this.height);
+            }
+            eliminar() {
+
+            this.x = null;
+            this.y = null;
+            this.width = null;
+            this.height = null;
             }
 
         }
-        const cuadradoAleatorio = new Cuadrado();
-
-        
-        
-
-        //coches.push(new Coche(posicionCochesX[0],100,img3));
-        //coches.push(new Coche(posicionCochesX[1],630,img4));
-
-
-        //const coche = new Coche(400,100,img3);
-        //const coche2 = new Coche(230,630,img4);
-
-        //coche.dibujar();
+        let cuadradoAleatorio = new Cuadrado();
 
         function repintarObjetos(){
-            //rio1.dibujar();
-            //rio2.dibujar();
            
             for (var i=0;i<cantidadDe;i++){
             cespedes[i].dibujar();
@@ -649,23 +544,17 @@
             }
             cuadradoAleatorio.dibujar();
 
-            
-            //carretera.dibujar(); 
-            //carretera2.dibujar(); 
-            //carretera3.dibujar(); 
-            //carretera4.dibujar(); 
             for (var i=0;i<cantidadDe*2;i++){
                 coches[i].dibujar();
             }
-            //coches[0].dibujar();
-            //coches[1].dibujar();
+
         }
 
 
         function movePlayer(dx, dy) {
             if (!pause) {
                 if (enBalsa) {
-                    jugador.x += 1; // Mover al jugador horizontalmente con la balsa
+                    jugador.x += 1; 
                 } else {
                     jugador.x += dx;
                     jugador.y += dy;
@@ -675,15 +564,12 @@
         }
 
         function moveObjetos(dx, dy) {
-         // Mueve al jugador en la dirección especificada (dx, dy)
 
          for (var i=0;i<cantidadDe;i++){
             cespedes[i].y += dy;
             trayecto += dy;
          }
 
-         //rio1.y += dy;
-         //rio2.y += dy;
          estacionamiento.y += dy;
          enemigo.y += dy;
          cuadradoAleatorio.y += dy;
@@ -692,17 +578,11 @@
             carreteras[i].y += dy;
          }
 
-         //carretera.y += dy;
-         //carretera2.y+= dy;
-         //carretera3.y+= dy;
-         //carretera4.y+= dy;
 
          for (var i=0;i<cantidadDe*2;i++){
             coches[i].y += dy;
          }
 
-         //coches[0].y += dy;
-         //coches[1].y += dy;
          
          repaint();
         }
@@ -716,7 +596,6 @@
                         jugador.y < coche.y + coche.height &&
                         jugador.y + jugador.height > coche.y
                     ) {
-                        // Colisión detectada mientras no esté invulnerable
                         audio2.play();
                         audio3.play();
                         handleCollision();
@@ -730,7 +609,7 @@
                         jugador.y < disparo.y + disparo.height &&
                         jugador.y + jugador.height > disparo.y
                     ) {
-                        // Colisión detectada, quita una vida al jugador y elimina el disparo
+
                         audio2.play();
                         handleCollision();
                         audio7.play();
@@ -742,20 +621,18 @@
 
         function handleCollision() {
             if (!invulnerable) {
-                vida--; // Reducir la cantidad de vidas
-                invulnerable = true; // El jugador ahora es invulnerable
-                lastCollisionTime = Date.now(); // Registra el tiempo de la última colisión
+                vida--; 
+                invulnerable = true; 
+                lastCollisionTime = Date.now(); 
 
-                // Reubicar al jugador en una posición segura después de la colisión.
                 jugador.x = (canvas.width / 2) - 25;
                 jugador.y = 600;
                 
                 if (vida <= 0) {
                     pause = true;
-                    gameOverScreen = true; // Establece el estado de "Game Over" cuando se agoten las vidas
+                    gameOverScreen = true; 
                 }
 
-                // Inicia un temporizador para volver al jugador vulnerable después de 2 segundos.
                 setTimeout(() => {
                     invulnerable = false;
                 }, invulnerabilityDuration);
@@ -772,7 +649,6 @@
                 vidasEnemigo--;
                 if (vidasEnemigo === 0) {
                     gameOverScreen = true;
-                    //reiniciarJuego(); // Implementa esta función según tus necesidades
                 }
                 cuadradoAleatorio.x =85 + Math.random() * (canvas.width - 135 - 85);
                 switch (Math.floor(Math.random() * 2) + 1) {
@@ -789,41 +665,55 @@
                         break;
                 }
                 console.log(cuadradoAleatorio.y);
-                // Colisión detectada entre el jugador y el cuadrado
-                // Realiza la lógica para quitar una vida al enemigo aquí
-                // También puedes hacer que el cuadrado desaparezca o reaparezca en otro lugar si es necesario
             }
         }
 
         function displayGameOverScreen() {
-            audio.loop = false;
-            audio.pause();
-            audio5.play();
-            ctx.fillStyle = "rgba(0, 0, 0, 0.7)"; // Fondo oscuro
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.font = "40px Arial";
-            ctx.fillStyle = "white";
             if(vida>0){
-                ctx.fillText("   Victoria", canvas.width / 2 - 100, canvas.height / 2 - 40);  
-                ctx.fillStyle = "green";  
+                if(nivel==3){
+                    audio9.play(); 
+                    audio10.play();
+                    ctx.fillStyle = "white"; 
+                    ctx.fillRect(85, 0, canvas.width, canvas.height);
+                    ctx.font = "40px Arial";
+                    ctx.fillStyle = "black";
+                    ctx.fillText("Juego Completado", canvas.width / 2 - 160, canvas.height / 2 - 40); 
+                    ctx.fillStyle = "green";  
+                }else{
+                    tablero();
+                    audio9.play(); 
+                    audio10.play();
+                    ctx.fillStyle = "white"; 
+                    ctx.fillRect(85, 0, canvas.width, canvas.height);
+                    ctx.font = "40px Arial";
+                    ctx.fillStyle = "black";
+                    ctx.fillText("   Victoria", canvas.width / 2 - 100, canvas.height / 2 - 40);  
+                    ctx.fillStyle = "green"; 
+                    
+                }
+ 
             }else{
+                audio.loop = false;
+                audio.pause();
+                audio5.play();
+                ctx.fillStyle = "rgba(0, 0, 0, 0.7)"; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.font = "40px Arial";
+                ctx.fillStyle = "white";
                 ctx.fillText("Game Over", canvas.width / 2 - 100, canvas.height / 2 - 40);
                 ctx.fillStyle = "red";
             }
         
-            // Dibuja el botón de "Volver a Empezar"
             
             ctx.fillRect(canvas.width / 2 - 160, canvas.height / 2 + 20, 320, 40);
             ctx.fillStyle = "white";
             ctx.fillText("Volver a Empezar", canvas.width / 2 - 160, canvas.height / 2 + 50);
 
-            // Agrega un detector de clic para el botón de "Volver a Empezar"
             canvas.addEventListener("click", restartGame);
         }
 
         function restartGame(event) {
-            // Verifica si se hizo clic en el botón de "Volver a Empezar"
             var rect = canvas.getBoundingClientRect();
             var mouseX = event.clientX - rect.left;
             var mouseY = event.clientY - rect.top;
@@ -834,24 +724,22 @@
                 mouseY > canvas.height / 2 + 20 &&
                 mouseY < canvas.height / 2 + 60
             ) {
-                // Reinicia el juego
                 gameOverScreen = false;
-                vida = 3; // Restablece las vidas u otros valores del juego según sea necesario.
                 pause=false;
                 if(vida>0){
                     nivel ++;
-                    //
-                    mainX=0, mainY=0, vida=10;
+                    vida=10;
+                    jugador.x = (canvas.width/2)-35; 
+                    jugador.y = 600;
                     pause=false;
                     dir, paso=30,trayecto=50, cantidadDe=8;
                     invulnerable = false;
-                    invulnerabilityDuration = 1000; // 2 segundos en milisegundos
+                    invulnerabilityDuration = 500; 
                     lastCollisionTime = 0;
                     gameOverScreen = false;
                     minutos = 0;
-                    vsegundos = 0;
+                    segundos = 0;
                     console.log(canvas.width);
-                    vidasEnemigo = 8;
                     carreteras.splice(0, carreteras.length);
                     posicionCarreteraX = [-250,-750,-1200,-1600,-2000,-2400,-2800,-3300]
                     carreteras = [];
@@ -882,16 +770,34 @@
                     }
                     estacionamiento.eliminar();
                     estacionamiento = new Estacionamiento(-3500);
-                    
-                    
-                    //
+                    cuadradoAleatorio.eliminar();
+                    cuadradoAleatorio = new Cuadrado();
+                    enemigo.proyectiles.splice(0,enemigo.proyectiles.length );
+                    enemigo.eliminar();
+                    enemigo = new Enemigo();
+                    velocidadCoches+=1;
+                    if(nivel==2){
+                        audio.loop = false;
+                        audio.pause();
+                        audio.src='Captain_Scurvy.mp3';
+                        audio.play();
+                        vidasEnemigo=5;
+                       
+                    }else if(nivel==3){
+                        audio.loop = false;
+                        audio.pause();
+                        audio.src='Voxel_Revolution.mp3';
+                        audio.play();
+                        vidasEnemigo=8;
+                    }
+                    if(nivel==4){
+                        location.reload();
+                    }
+
                 }else{
                     location.reload();
                 }
-                
-                // Otras reinicializaciones del juego...
 
-                // Elimina el detector de clic para evitar múltiples clics accidentales
                 canvas.removeEventListener("click", restartGame);
             }
         }
@@ -901,17 +807,14 @@
             return minutosStr + ":" + segundosStr;
         }
 
-        // Actualiza el cronómetro cada segundo
         setInterval(function () {
             segundos++;
             if (segundos === 60) {
                 minutos++;
                 segundos = 0;
             }
-            repaint(); // Vuelve a dibujar para mostrar el tiempo actualizado
+            repaint();
         }, 1000);
-
-
 
     </script>
     
